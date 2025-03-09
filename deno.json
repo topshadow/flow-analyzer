@@ -1,0 +1,20 @@
+{
+  "name": "@24wings/flow-analyzer",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "tasks": {
+    "dev": "deno test --watch"
+  },
+  "license": "MIT",
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "@std/async": "jsr:@std/async@^1.0.10",
+    "@std/fmt": "jsr:@std/fmt@^1.0.5",
+    "@std/media-types": "jsr:@std/media-types@^1.1.0",
+    "@std/streams": "jsr:@std/streams@^1.0.9",
+    "@24wings/core": "jsr:@24wings/core@0.1.1"
+  },
+  "fmt": {
+    "lineWidth": 200
+  }
+}
