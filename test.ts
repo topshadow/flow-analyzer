@@ -1,4 +1,14 @@
-Deno.test('xss echo', async () => {
-  let client = Deno.createHttpClient({ proxy: { url: 'http://localhost:8083' } });
-  await fetch(`http://localhost:8787/xss/replace/nocase?name=admin`, { client });
+import Surreal from "https://deno.land/x/surrealdb/mod.ts";
+import { surrealdbDenoEngines } from "https://deno.land/x/surrealdb.deno/mod.ts";
+
+// Enable the WebAssembly engines
+const db = new Surreal({
+    engines: surrealdbDenoEngines(),
 });
+
+// Now we can start SurrealDB as an in-memory database
+await db.connect("mem://");
+// Or we can start a persisted SurrealKV database
+await db.connect("surrealkv://demo");
+
+// Now use the JavaScript SDK as normal.

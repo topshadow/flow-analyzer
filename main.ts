@@ -2,7 +2,7 @@
 
 import { HttpUtils } from '../../core/core/mod.ts';
 import { PluginManager } from "./plugin-manager.ts";
-import { AnalysisContext } from "./type.d.ts";
+import type{ AnalysisContext } from "./type.d.ts";
 
 async function main() {
   const pluginManager = new PluginManager();

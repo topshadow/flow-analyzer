@@ -1,9 +1,7 @@
 /// <reference lib="deno.worker"/>
-import { db, Fuzz, HttpUtils, js, str, xhtml } from '@24wings/core';
-import { FuzzParam } from '@24wings/core';
+import { db, Fuzz, HttpUtils, js, str, xhtml } from 'jsr:@24wings/core';
+import { FuzzParam } from 'jsr:@24wings/core';
 import { WorkerEventEmitter } from '../woker.adaptor.ts';
-import { red } from '@std/fmt/colors';
-import { format } from '@std/fmt/bytes';
 
 interface Payload {
   value: string;
