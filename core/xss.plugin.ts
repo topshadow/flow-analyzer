@@ -1,4 +1,5 @@
-import { Fuzz, type FuzzParam, HttpUtils, js, str, xhtml } from "jsr:@24wings/core@0.1.5";
+// deno-lint-ignore-file
+import { fuzz ,js, str, xhtml,httpUtil } from "@24wings/core";
 import { getLogger } from "@logtape/logtape";
 const log = getLogger(["plugin", "xss"]);
 
@@ -10,18 +11,18 @@ interface Payload {
   payloadType: "js" | "spec-attr" | "tag" | "attr" | "comment";
 }
 async function endpoint(request: Request): Promise<PluginResult[]> {
-  const fuzz = await Fuzz.fromRequest(request);
+  const fu = await fuzz.Fuzz.fromRequest(request);
   log.debug("开始xss 测试 for:" + request.url);
-  const params = fuzz.getAllFuzzableParams();
+  const params = fu.getAllFuzzableParams();
   log.debug("参数长度:" + params.length);
   const results: PluginResult[] = [];
   for (const param of params) {
-    results.push(...await fuzzParam(param, fuzz, request));
+    results.push(...await fuzzParam(param, fu, request));
   }
   return results;
 }
 
-async function fuzzParam(param: FuzzParam, fuzz: Fuzz, request: Request): Promise<PluginResult[]> {
+async function fuzzParam(param: fuzz.FuzzParam, fuzz: fuzz.Fuzz, request: Request): Promise<PluginResult[]> {
   const checkResults: PluginResult[] = [];
   const checkStr = str.generateRandomString(6);
   const verfiyRandomStr = str.generateRandomString(8);
@@ -103,7 +104,7 @@ async function fuzzParam(param: FuzzParam, fuzz: Fuzz, request: Request): Promis
     let i = 0;
 
     let detectPayload = checkStr + allDangerousChars.join(checkStr) + checkStr;
-    let cloneParam = { ...param, value: detectPayload } as FuzzParam;
+    let cloneParam = { ...param, value: detectPayload } as fuzz.FuzzParam;
     const resp = await fuzz.sendModifiedRequest(cloneParam);
     const respText = await (await resp.response).clone().text();
     filterChars = detectFilteredChars(respText, checkStr, allDangerousChars);
@@ -180,8 +181,8 @@ async function fuzzParam(param: FuzzParam, fuzz: Fuzz, request: Request): Promis
           payload: payload.value,
           level: "medium",
           type: "xss",
-          requestRaw: await HttpUtils.dumpRequest(res.request.clone()),
-          responseRow: await HttpUtils.dumpResponse((await res.response).clone()),
+          requestRaw: await httpUtil.dumpRequest(res.request.clone()),
+          responseRow: await httpUtil.dumpResponse((await res.response).clone()),
           description: "xss漏洞",
           pluginName: "xss",
         });

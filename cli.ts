@@ -1,5 +1,5 @@
 import { parseArgs } from "jsr:@std/cli/parse-args";
-import { har, HttpUtils } from "@24wings/core";
+import { har, httpUtil } from "@24wings/core";
 import {  getLogger } from "jsr:@logtape/logtape";
 import { setupLog } from "./log.ts";
 import * as colors from "jsr:@std/fmt/colors";
@@ -91,7 +91,7 @@ async function startAnalyzer(options: {
       const result = har.harToHttpText(jsonString);
       const scanResult:PluginResult[]=[]
       for (const { request, response } of result) {
-       scanResult.push(...await plugin.default!.endpoint(await HttpUtils.parseRequest(request)));
+       scanResult.push(...await plugin.default!.endpoint(await httpUtil.parseRequest(request)));
         // await plugin.default!.endpointOut(await HttpUtils.parseRequest(request),await HttpUtils.parseResponse(response));
       }
       if(options.json){
